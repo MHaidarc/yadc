@@ -4,7 +4,7 @@ MAIN_SOURCE := $(wildcard src/main.c)
 
 PRAGMA = ./doom
 CLANG = clang
-CLANG_FLAGS = -lglut -lGLU -lGL -lm
+CLANG_FLAGS = -lglut -lGLU -lGL -lm -O0
 
 run: compile exe
 

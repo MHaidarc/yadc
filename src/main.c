@@ -1,19 +1,16 @@
+#include <GL/gl.h>
 #include <GL/glut.h>
 #include <math.h>
+#define RADIAN 0.0174533
 #define P3 3 * M_PI / 2
 
-float playerX, playerY, playerDeltaX, playerDeltaY, playerAngle;
+float playerX, playerY, playerDeltaX, playerDeltaY, playerAngle, disT;
 
 int mapX = 8, mapY = 8, mapS = 64;
 int map[] = {
-    1, 1, 1, 1, 1, 1, 1, 1, 
-    1, 0, 1, 0, 0, 0, 0, 1,
-    1, 0, 1, 1, 1, 0, 0, 1, 
-    1, 0, 0, 0, 0, 0, 0, 1,
-    1, 0, 1, 1, 0, 0, 0, 1,
-    1, 0, 0, 1, 0, 1, 0, 1,
-    1, 0, 0, 1, 0, 0, 0, 1,
-    1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0,
+    0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1,
+    0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 };
 
 float findDistance(float ax, float ay, float bx, float by, float ang) {
@@ -23,9 +20,17 @@ float findDistance(float ax, float ay, float bx, float by, float ang) {
 void castRays() {
   int ray, mx, my, mp, depthOfField;
   float rayX, rayY, rayAngle, xOffset, yOffset;
-  rayAngle = playerAngle;
+  rayAngle = playerAngle - RADIAN * 30;
 
-  for (ray = 0; ray < 1; ray++) {
+  if (rayAngle < 0) {
+    rayAngle += 2 * M_PI;
+  }
+
+  if (rayAngle > 2 * M_PI) {
+    rayAngle -= 2 * M_PI;
+  }
+
+  for (ray = 0; ray < 90; ray++) {
     depthOfField = 0;
     float disH = 1000000, hx = playerX, hy = playerY;
     float aTan = -1 / tan(rayAngle);
@@ -111,19 +116,53 @@ void castRays() {
     if (disV < disH) {
       rayX = vx;
       rayY = vy;
+      disT = disV;
+      glColor3f(0.9, 0, 0);
     }
-    
+
     if (disV > disH) {
       rayX = hx;
       rayY = hy;
+      disT = disH;
+      glColor3f(0.7, 0, 0);
     }
 
-    glColor3f(1, 0, 0);
-    glLineWidth(1);
+    glLineWidth(3);
     glBegin(GL_LINES);
     glVertex2i(playerX, playerY);
     glVertex2i(rayX, rayY);
     glEnd();
+
+    float cameraAngle = playerAngle - rayAngle;
+    if (cameraAngle < 0) {
+      cameraAngle += 2 * M_PI;
+    }
+    if (cameraAngle > 2 * M_PI) {
+      cameraAngle -= 2 * M_PI;
+    }
+    disT = disT * cos(cameraAngle);
+
+    float lineH = (mapS * 320) / disT;
+    if (lineH > 320) {
+      lineH = 320;
+    }
+    float lineOffset = 160 - lineH / 2;
+    
+    glLineWidth(8);
+    glBegin(GL_LINES);
+    glVertex2i(ray * 8 + 530, lineOffset);
+    glVertex2i(ray * 8 + 530, lineH + lineOffset);
+    glEnd();
+
+    rayAngle += RADIAN;
+
+    if (rayAngle < 0) {
+      rayAngle += 2 * M_PI;
+    }
+
+    if (rayAngle > 2 * M_PI) {
+      rayAngle -= 2 * M_PI;
+    }
   }
 }
 

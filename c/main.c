@@ -20,10 +20,12 @@ void castRays() {
   int ray, mx, my, mp, depthOfField;
   float rayX, rayY, rayAngle, xOffset, yOffset;
   rayAngle = playerAngle;
+
   for (ray = 0; ray < 1; ray++) {
     depthOfField = 0;
     float disH = 1000000, hx = playerX, hy = playerY;
     float aTan = -1 / tan(rayAngle);
+
     if (rayAngle > M_PI) {
       rayY = (((int)playerY >> 6) << 6) - 0.0001;
       rayX = (playerY - rayY) * aTan + playerX;
@@ -106,10 +108,12 @@ void castRays() {
       rayX = vx;
       rayY = vy;
     }
+    
     if (disV > disH) {
       rayX = hx;
       rayY = hy;
     }
+
     glColor3f(1, 0, 0);
     glLineWidth(1);
     glBegin(GL_LINES);
@@ -127,6 +131,7 @@ void drawMap2D() {
         glColor3f(1, 1, 1);
       else
         glColor3f(0, 0, 0);
+
       xOffset = x * mapS;
       yOffset = y * mapS;
       glBegin(GL_QUADS);

@@ -1,4 +1,3 @@
-#include <GL/gl.h>
 #include <GL/glut.h>
 #include <math.h>
 #define P3 3 * M_PI / 2

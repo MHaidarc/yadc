@@ -30,7 +30,7 @@ void castRays() {
     rayAngle -= 2 * M_PI;
   }
 
-  for (ray = 0; ray < 90; ray++) {
+  for (ray = 0; ray < 60; ray++) {
     depthOfField = 0;
     float disH = 1000000, hx = playerX, hy = playerY;
     float aTan = -1 / tan(rayAngle);
@@ -117,14 +117,14 @@ void castRays() {
       rayX = vx;
       rayY = vy;
       disT = disV;
-      glColor3f(0.9, 0, 0);
+      glColor3f(0.3, 0.7, 0);
     }
 
     if (disV > disH) {
       rayX = hx;
       rayY = hy;
       disT = disH;
-      glColor3f(0.7, 0, 0);
+      glColor3f(0.5, 0.9, 0);
     }
 
     glLineWidth(3);
@@ -147,8 +147,8 @@ void castRays() {
       lineH = 320;
     }
     float lineOffset = 160 - lineH / 2;
-    
-    glLineWidth(8);
+
+    glLineWidth(10);
     glBegin(GL_LINES);
     glVertex2i(ray * 8 + 530, lineOffset);
     glVertex2i(ray * 8 + 530, lineH + lineOffset);

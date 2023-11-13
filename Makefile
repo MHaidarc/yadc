@@ -3,13 +3,14 @@ H_SOURCES := $(wildcard src/headers/*.h)
 MAIN_SOURCE := $(wildcard src/main.c)
 
 PRAGMA = ./doom
-CLANG = clang
-CLANG_FLAGS = -lglut -lGLU -lGL -lm -Ofast
+CC_FLAGS = -lglut -lGLU -lGL -lm -Wall -Wextra -pedantic 
 
 run: compile exe
 
+build: compile
+
 compile:$(MAIN_SOURCE) $(C_SOURCES) $(H_SOURCES)
-	$(CLANG) -o $(PRAGMA) $^ $(CLANG_FLAGS) 	
+	$(CC) -o $(PRAGMA) $^ $(CC_FLAGS)
 
 exe: 
 	$(PRAGMA)
